@@ -7,7 +7,7 @@ class HtmlLinkScraper {
         String html = urlToParse.toURL().text
         String resultUrl = null
         html.eachLine { String line ->
-            if (line.trim().toLowerCase().endsWith("target=\"_blank\">${menuOfInterest}</a></p>".toLowerCase())) {
+            if (line.trim().toLowerCase().endsWith("target=\"_blank\">${menuOfInterest.toLowerCase()}</a></p>".toLowerCase())) {
                 def slurper = new XmlSlurper()
                 def doc = slurper.parseText(line)
                 doc.depthFirst().collect { it }.findAll { it.name() == "a" }.each {
