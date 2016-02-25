@@ -4,12 +4,8 @@ version '1.1-SNAPSHOT'
 apply plugin: 'groovy'
 apply plugin: 'war'
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    compile 'com.google.code.gson:gson:2.6.1'
+    compile project(':echo-common')
     compile 'org.apache.pdfbox:pdfbox:1.8.11'
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile localGroovy()

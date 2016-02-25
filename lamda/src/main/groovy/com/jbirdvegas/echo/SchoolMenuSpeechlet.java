@@ -11,11 +11,10 @@ import com.amazon.speech.speechlet.SpeechletException;
 import com.amazon.speech.speechlet.SpeechletResponse;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.SimpleCard;
+import com.jbirdvegas.echo.common.AnswerModel;
+import com.jbirdvegas.echo.common.QuestionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class SchoolMenuSpeechlet implements Speechlet {
     private Logger mLogger = LoggerFactory.getLogger(SchoolMenuSpeechlet.class);
@@ -32,7 +31,7 @@ public class SchoolMenuSpeechlet implements Speechlet {
         mLogger.info("Discovered intent named: $intentName");
         switch (intentName) {
             case "AMAZON.HelpIntent":
-                return getHelpResponse();
+                return getSchoolMenuIntent(null);
             case "SchoolMenuIntent":
                 return getSchoolMenuIntent(intent);
         }
@@ -40,30 +39,35 @@ public class SchoolMenuSpeechlet implements Speechlet {
     }
 
     private SpeechletResponse getSchoolMenuIntent(Intent intent) {
-        String school = intent.getSlot("school").getValue();
-        if (school == null) {
-            school = "Elementary";
-        }
-        String meal = intent.getSlot("meal").getValue();
-        if (meal == null) {
-            meal = "Lunch";
-        }
-        String when = intent.getSlot("when").getValue();
-        if (when == null) {
-            when = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+        // setup default gson model
+        QuestionModel question = new QuestionModel();
+        // if overrides come from alexa then accept them.
+        if (intent != null) {
+            String school = intent.getSlot("school").getValue();
+            if (school != null) {
+                question.school = school;
+            }
+            String meal = intent.getSlot("meal").getValue();
+            if (meal != null) {
+                question.meal = meal;
+            }
+            String when = intent.getSlot("when").getValue();
+            if (when != null) {
+                question.when = when;
+            }
         }
 
-        //http://ec2-54-88-151-2.compute-1.amazonaws.com/ec2-1.1-SNAPSHOT/v1/rest/lunch
+        // call helper to get menu response as gson model
+        AnswerModel answerModel = MenuGetter.doPost(question);
 
-        String menuText = MenuGetter.doPost(meal, school, when);
-        mLogger.info("################################################################Menu text: $menuText");
-
+        // setup response to user in app
         SimpleCard card = new SimpleCard();
-        card.setTitle(school);
-        card.setContent(menuText);
+        card.setTitle(String.format("%s %s school", question.meal, question.school));
+        card.setContent(answerModel.normalizeForVerbalResponse());
 
+        // setup response to user verbally through alexa
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
-        speech.setText(menuText);
+        speech.setText(answerModel.normalizeForVerbalResponse());
 
         return SpeechletResponse.newTellResponse(speech, card);
     }

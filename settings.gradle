@@ -3,4 +3,5 @@ rootProject.name = 'wilson-school-menu'
 include 'ec2'
 // receives the alexa calls
 include 'lamda'
+include 'echo-common'
 

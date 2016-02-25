@@ -1,6 +1,8 @@
 package com.jbirdvegas.echo.ec2
 
 import com.google.gson.Gson
+import com.jbirdvegas.echo.common.AnswerModel
+import com.jbirdvegas.echo.common.QuestionModel
 import com.jbirdvegas.echo.ec2.util.HtmlLinkScraper
 import com.jbirdvegas.echo.ec2.util.PdfUtil
 import org.apache.commons.lang3.tuple.Pair
@@ -23,7 +25,7 @@ public class AlexaServlet {
     @Path('/{meal}')
     public String getMenuForSchool(@PathParam('meal') String meal, String json) {
         def gson = new Gson()
-        Request request = gson.fromJson(json, Request.class)
+        QuestionModel request = gson.fromJson(json, QuestionModel.class)
         println "Found request: $json"
         Pair<Integer, Integer> calendarPositionsForDate = PdfUtil.getCalendarPositionsForDate(mSimpleDateFormat.parse(request.when))
         System.out.println("Received school: " + request.school + " meal: " + meal + " positions: " + calendarPositionsForDate.toString())
@@ -34,21 +36,12 @@ public class AlexaServlet {
         def position = PdfUtil.getRectangleForPosition(specPage, calendarPositionsForDate.left, calendarPositionsForDate.right)
         def menuText = PdfUtil.getTextFromRectangle(pdDoc, position).trim()
 
-        def response = new Response()
-        response.meal = meal
-        response.menu = menuText
-        response.school = request.school
-        return gson.toJson(response)
+        def answerModel = new AnswerModel()
+        answerModel.meal = meal
+        answerModel.menu = menuText
+        answerModel.school = request.school
+        return gson.toJson(answerModel)
     }
 
-    class Request {
-        public String when;
-        public String school;
-    }
 
-    class Response {
-        public String meal;
-        public String menu;
-        public String school;
-    }
 }
