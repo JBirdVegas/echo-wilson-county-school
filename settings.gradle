@@ -1,0 +1,6 @@
+rootProject.name = 'wilson-school-menu'
+// does computations
+include 'ec2'
+// receives the alexa calls
+include 'lamda'
+

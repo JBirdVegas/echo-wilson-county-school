@@ -1,0 +1,24 @@
+{
+  "intents": [
+    {
+      "intent": "SchoolMenuIntent",
+      "slots": [
+        {
+          "name": "school",
+          "type": "LIST_OF_SCHOOLS"
+        },
+        {
+          "name": "meal",
+          "type": "LIST_OF_MEALS"
+        },
+        {
+          "name": "when",
+          "type": "AMAZON.DATE"
+        }
+      ]
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    }
+  ]
+}

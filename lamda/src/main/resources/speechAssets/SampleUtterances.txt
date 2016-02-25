@@ -1,0 +1,14 @@
+SchoolMenuIntent What's for {mail}
+SchoolMenuIntent What's for {mail} {when}
+SchoolMenuIntent What's for {mail} at {school}
+SchoolMenuIntent What's for {mail} at {school} {when}
+SchoolMenuIntent What is the {school} having for {meal}
+SchoolMenuIntent What is the {school} having for {meal} {when}
+SchoolMenuIntent What is the {school} doing for {meal}
+SchoolMenuIntent What is the {school} doing for {meal} {when}
+SchoolMenuIntent What is the {school} going to have for {meal}
+SchoolMenuIntent What is the {school} going to have for {meal} {when}
+SchoolMenuIntent What's {school} doing for {meal}
+SchoolMenuIntent What's {school} doing for {meal} {when}
+SchoolMenuIntent What's {school} having for {meal}
+SchoolMenuIntent What's {school} having for {meal} {when}
