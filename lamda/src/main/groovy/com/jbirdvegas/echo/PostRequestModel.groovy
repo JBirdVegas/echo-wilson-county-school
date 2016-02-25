@@ -1,6 +1,6 @@
 package com.jbirdvegas.echo;
 
 public class PostRequestModel {
-    String when
-    String school
+    public String when
+    public String school
 }
